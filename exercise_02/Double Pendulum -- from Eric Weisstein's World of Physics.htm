@@ -1,0 +1,801 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Double Pendulum -- from Eric Weisstein's World of Physics</title>
+<meta name="DC.Creator" content="Weisstein, Eric W.">
+<meta name="DC.Description" content="A double pendulum consists of one pendulum attached to another.  Double pendula are an example of a simple physical system which can exhibit chaotic behavior.  Consider a double bob pendulum with masses m_1 and m_2 attached by rigid massless wires of lengths l_1 and l_2. Further, let the angles the two wires make with the vertical be denoted \theta_1 and \theta_2, as illustrated above.  Finally, let gravity be given by g. Then the positions of the bobs are given by  x_1 = l_1\sin\theta_1 y_1 =...">
+<meta name="DC.Subject" scheme="MathWorld" content="Physics:Animations:Animated GIFs">
+<meta name="DC.Subject" scheme="MathWorld" content="Physics:Mechanics:Pendula">
+<meta name="DC.Rights" content="Copyright 1996-2007 Eric W. Weisstein">
+<meta name="DC.Format" scheme="IMT" content="text/html">
+<meta name="DC.Identifier" scheme="URI" content="http://scienceworld.wolfram.com/physics/DoublePendulum.html">
+<meta name="DC.Language" scheme="RFC3066" content="en">
+<meta name="DC.Publisher" content="Wolfram Research, Inc.">
+<meta name="DC.Relation.IsPartOf" scheme="URI" content="http://scienceworld.wolfram.com/physics/">
+<meta name="DC.Type" scheme="DCMIType" content="Text">
+<link rel="stylesheet" type="text/css" href="/css/mathworld.css">
+</head>
+
+<body>
+
+<!-- beg noidx -->
+
+
+<!--Top Bar-->
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<tr bgcolor="#000000"><td align="left"><img src="/images/row1.gif" width="784" height="10" alt="" border="0"></td></tr>
+<tr><td align="left" bgcolor="#000000" style="background:#000000 url(/images/row2_bg.gif)"><a href="http://www.wolfram.com/"><img src="/images/btn_wolfram.gif" width="158" height="24" alt="Wolfram Research" border="0"></a><img src="/images/mid-backangle.gif" width="24" height="24" alt="" border="0"><a href="/" target="_top"><img src="/images/btn_products.gif" border="0" height="24" width="453" alt="scienceworld.wolfram.com"></a><img src="/images/row2_backangle.gif" width="22" height="24" alt="" border="0"><a href="http://www.wolfram.com/webresources.html" target="_top"><img src="/images/btn_webresource.gif" border="0" width="127" height="24" alt="Other Wolfram Sites"></a></td></tr>
+<tr><td valign="top" style="background:url(/images/row3_bg.gif)"><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+	<td valign="top"><nobr><a href="/astronomy/"><img src="/images/btn_astronomy.gif" width="96" height="35" border="0"></a><a href="/biography/"><img src="/images/btn_biography.gif" width="86" height="35" border="0"></a><a href="/chemistry/"><img src="/images/btn_chemistry.gif" width="86" height="35" border="0"></a><a href="http://mathworld.wolfram.com/"><img src="/images/btn_mathematics.gif" width="98" height="35" border="0"></a><a href="/physics/"><img src="/images/btn_physics_on.gif" width="71" height="35" border="0"></a><img src="/images/spacer.gif" width="40" height="1" alt=""></nobr></td>
+	<td valign="top"><nobr><img src="/images/row3_frontangle.gif" width="27" height="28" alt=""></nobr></td>
+	<td valign="top"><table cellspacing="0" cellpadding="0" border="0">
+<tr><form action="http://search.wolfram.com/" method="get">
+<input type="hidden" name="lang" value="en" />
+<input type="hidden" name="collection" value="scienceworld" /> 
+<td valign="middle"><nobr><img src="/images/btn_search.gif" width="56" height="28" alt="Search Site"></nobr></td>
+<td valign="middle" style="background:url(/images/search_bg.gif)"><nobr><input type="hidden" name="sitesearch" value="scienceworld.wolfram.com/physics"><input type="text" name="q" size="16"></nobr></td>
+<td valign="middle" style="background:url(/images/search_bg.gif)"><nobr><img src="/images/spacer.gif" width="5" height="1" alt=""><input type="image" src="/images/btn_go.gif" width="22" height="28" alt="Go" border="0"></nobr></td>
+</form></tr></table></td>
+	<td valign="top" width="100%"><nobr><img src="/images/row3_backangle.gif" width="28" height="28" alt=""></nobr></td>
+</tr>
+</table></td></tr>
+</table>
+
+
+<!-- End Top Bar -->
+
+<img src="/images/spacer.gif" alt="" height="10">
+
+<!-- Main Table for Sidebar, Separator, and Entry-->
+
+<table border="0" cellspacing="0" cellpadding="0">
+<tr valign="top">
+<td>
+
+<!-- Sidebar -->
+
+<table border="0" cellspacing="0" cellpadding="0" width="140" bgcolor="#eeeeee">
+
+<!-- Sidebar Navigation -->
+
+<tr>
+<td>
+<a href="/physics/"><img src="/physics/images/sidebar-physics.gif" 
+width="149" height="43" border="0"></a>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="#cccccc" align="left" valign="top">
+<img src="/images/clear.gif" alt="" width="149" height="8" border="0">
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="/physics/images/physics-topics.gif" width="149" height="233" usemap="#Map" border="0">
+</td>
+</tr>
+
+<tr>
+<td bgcolor="#cccccc" align="left" valign="top">
+<img src="/images/clear.gif" alt="" width="149" height="8" border="0">
+</td>
+</tr>
+
+<tr>
+<td width="149" align="left" valign="top">
+<a href="/physics/letters/"><img src="/images/sidebar-alphabetical.gif" alt="Alphabetical Index" width="149" height="27" border="0"></a></td>
+</tr>
+
+<tr>
+<td bgcolor="#cccccc" align="left" valign="top">
+<img src="/images/clear.gif" alt="" width="149" height="8" border="0">
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">
+<img src="/images/sidebar-about.gif" alt="About this site" width="150" height="133" border="0" usemap="#about">
+</td>
+</tr>
+
+<tr>
+<td bgcolor="#cccccc" align="left" valign="top">
+<img src="/images/clear.gif" alt="" width="149" height="8" border="0">
+</td>
+</tr>
+
+<tr>
+<td align="left" valign="top">
+<a href="http://www.ericweisstein.com/"><img src="/images/sidebar-ericsites.gif" alt="About this site" width="150" height="27" border="0"></a>
+</td>
+</tr>
+
+<tr>
+<tr>
+<td bgcolor="#cccccc" align="left" valign="top">
+<img src="/images/clear.gif" alt="" width="149" height="8" border="0">
+</td>
+</tr>
+
+</table>
+
+<map name="Map">
+  <area shape="rect" coords="1, 21,159, 37" href="/physics/topics/Astrophysics.html" alt="Astrophysics">
+  <area shape="rect" coords="1, 36,154, 53" href="/physics/topics/Electromagnetism.html" alt="Electromagnetism">
+  <area shape="rect" coords="1, 53,152, 69" href="/physics/topics/ExperimentalPhysics.html" alt="Experimental Physics">
+  <area shape="rect" coords="1, 68,156, 86" href="/physics/topics/FluidMechanics.html" alt="Fluid Mechanics">
+  <area shape="rect" coords="1, 85,161,104" href="/physics/topics/HistoryandTerminology.html" alt="History and Terminology">
+  <area shape="rect" coords="1,103,156,122" href="/physics/topics/Mechanics.html" alt="Mechanics">
+  <area shape="rect" coords="1,121,164,139" href="/physics/topics/ModernPhysics.html" alt="Modern Physics">
+  <area shape="rect" coords="1,138,185,156" href="/physics/topics/Optics.html" alt="Optics">
+  <area shape="rect" coords="1,155,170,173" href="/physics/topics/StatesofMatter.html" alt="States of Matter">
+  <area shape="rect" coords="1,172,187,189" href="/physics/topics/Thermodynamics.html" alt="Thermodynamics">
+  <area shape="rect" coords="1,188,171,207" href="/physics/topics/UnitsandDimensionalAnalysis.html" alt="Units and Dimensional Analysis">
+  <area shape="rect" coords="1,206,189,253" href="/physics/topics/WaveMotion.html" alt="Wave Motion">
+</map>
+
+<map name="about">
+  <area shape="rect" coords="1,  1,151, 23" href="/info/" alt="About this site">
+  <area shape="rect" coords="1, 22,152, 40" href="/info/faq.html" alt="FAQ">
+  <area shape="rect" coords="1, 39,149, 56" href="/physics/whatsnew/" alt="What's new">
+  <area shape="rect" coords="1, 55,158, 73" href="/physics/random.html" alt="Random entry">
+  <area shape="rect" coords="1, 72,151, 91" href="/physics/contribute.html" alt="Contribute">
+  <area shape="rect" coords="1, 90,154,108" href="/info/guestbook.html" alt="Sign the guestbook">
+  <area shape="rect" coords="1,107,180,139" href="mailto:scienceworld@wolfram.com" alt="Email ScienceWorld">
+</map>
+
+
+<!-- End Sidebar -->
+
+</td>
+
+
+<!-- Spacer Column between Sidebar and Main Entry Columns -->
+
+<td><img src="/images/spacer.gif" alt="" width="10"></td>
+<td>
+<!-- Navigation Bar -->
+
+<table cellpadding="0" cellspacing="5" border="0">
+<tr>
+<td><a href="topics/Animations.html"><font size="1" face="Verdana" color="#333333" style="text-decoration:none"><b>Animations</b></font></a></td>
+<td><img src="/images/teal_rightarrow.gif" width="8" height="8" border="0" alt=">"></td>
+<td><a href="topics/AnimatedGIFs.html"><font size="1" face="Verdana" color="#333333" style="text-decoration:none"><b>Animated GIFs</b></font></a></td>
+<td><img src="/images/teal_downarrow.gif" width="8" height="8" border="0" alt="v"></td>
+</tr>
+</table>
+
+<table cellpadding="0" cellspacing="5" border="0">
+<tr>
+<td><a href="topics/Mechanics.html"><font size="1" face="Verdana" color="#333333" style="text-decoration:none"><b>Mechanics</b></font></a></td>
+<td><img src="/images/teal_rightarrow.gif" width="8" height="8" border="0" alt=">"></td>
+<td><a href="topics/Pendula.html"><font size="1" face="Verdana" color="#333333" style="text-decoration:none"><b>Pendula</b></font></a></td>
+<td><img src="/images/teal_downarrow.gif" width="8" height="8" border="0" alt="v"></td>
+</tr>
+</table>
+
+<!-- End Navigation Bar -->
+
+<br>
+<!-- end noidx -->
+
+
+<!-- Title Tab -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<td bgcolor="#339999" valign="top" width="2"><img src="/images/tealtab_topleft1.gif" alt="" border="0"><br></td>
+<td bgcolor="#339999" valign="top" width="18"><img src="/images/tealtab_topleft2.gif" alt="" border="0"><br></td>
+<td bgcolor="#339999" align="left" valign="middle" height="20"><font color="#ffffff" size="+1" face="Helvetica"><b>Double Pendulum</b></font></td>
+<td bgcolor="#339999" valign="top" align="left" width="14"><img src="/images/tealtab_topright.gif" alt="" border="0"><br></td>
+</tr>
+</table>
+
+<!-- End Title Tab -->
+
+<!-- Main Page -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr valign="top">
+<td colspan="6"><img src="/images/gradient-teal.gif" alt="" height="2"></td>
+</tr>
+<tr>
+<td bgcolor="#339999"><img src="/images/spacer.gif" alt="" width="2" height="10"></td>
+</tr>
+<tr>
+<td bgcolor="#339999"><img src="/images/spacer.gif" alt="" width="2"></td>
+<td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>
+
+<P>
+
+
+
+
+<DIV ALIGN="CENTER">
+<IMG
+ WIDTH="206" HEIGHT="248" BORDER="0"
+ SRC="dimg270.gif"> </DIV>
+
+<P>
+A double pendulum consists of one <a href="Pendulum.html">pendulum</a> attached to another.  Double pendula are an example of a simple
+physical system which can exhibit <a href="http://mathworld.wolfram.com/Chaos.html"  target="_blank">chaotic</a> <img src="http://scienceworld.wolfram.com/images/crossrefs/math.gif" width="12" height="12" alt="Eric Weisstein's World of Math"> behavior.  Consider a double bob pendulum with masses
+<IMG
+ WIDTH="25" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg271.gif"> and <IMG
+ WIDTH="25" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg272.gif"> attached by rigid massless wires of lengths <IMG
+ WIDTH="16" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg273.gif"> and <nowrap><IMG
+ WIDTH="16" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg274.gif">.</nowrap> Further, let the angles the two
+wires make with the vertical be denoted <IMG
+ WIDTH="19" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg275.gif"> and <nowrap><IMG
+ WIDTH="19" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg276.gif">,</nowrap> as illustrated above.  Finally, let <a href="Gravity.html">gravity</a>
+be given by <i>g</i>. Then the positions of the bobs are given by
+<div ALIGN="CENTER">
+
+
+ 
+<TABLE ALIGN="CENTER" CELLPADDING="0" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="20" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg277.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="55" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg278.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(1)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="19" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg279.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="70" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg280.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(2)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="20" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg281.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="126" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg282.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(3)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="19" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg283.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="147" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg284.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(4)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+The <a href="PotentialEnergy.html">potential energy</a> of the system is then given by
+<div ALIGN="CENTER">
+
+
+ 
+<TABLE ALIGN="CENTER" CELLPADDING="0" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="17" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg285.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="112" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg286.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(5)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT">&nbsp;</TD>
+<TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="258" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg287.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(6)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+and the <a href="KineticEnergy.html">kinetic energy</a> by
+
+<div ALIGN="CENTER">
+
+
+ 
+<TABLE ALIGN="CENTER" CELLPADDING="0" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="16" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg288.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="117" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg289.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(7)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT">&nbsp;</TD>
+<TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="366" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg290.gif"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(8)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+The <a href="Lagrangian.html">Lagrangian</a> is then
+
+<P>
+<table width="100%">
+<tr>
+<td align="left">
+<IMG
+ WIDTH="80" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg291.gif"> </td>
+<td></td>
+</tr>
+<tr>
+<td align="left">
+
+
+<IMG
+ WIDTH="389" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg292.gif"> </td>
+<td></td>
+</tr>
+<tr>
+<td align="right">
+
+
+<IMG
+ WIDTH="258" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg293.gif"> </td>
+<td width="10" align="right">
+
+(9)</td>
+</tr>
+</table>
+Therefore, for <nowrap><IMG
+ WIDTH="19" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg275.gif">,</nowrap> 
+<div ALIGN="CENTER">
+
+
+ 
+<TABLE ALIGN="CENTER" CELLPADDING="0" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="32" HEIGHT="51" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg294.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="283" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg295.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(10)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="76" HEIGHT="54" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg296.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="492" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg297.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(11)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="32" HEIGHT="51" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg298.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="331" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg299.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(12)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+so the <a href="http://mathworld.wolfram.com/Euler-LagrangeDifferentialEquation.html"  target="_blank">Euler-Lagrange differential equation</a> <img src="http://scienceworld.wolfram.com/images/crossrefs/math.gif" width="12" height="12" alt="Eric Weisstein's World of Math"> for <IMG
+ WIDTH="19" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg275.gif"> becomes
+
+<P>
+<table width="100%">
+<tr>
+<td align="left">
+
+
+<IMG
+ WIDTH="269" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg300.gif"> </td>
+<td></td>
+</tr>
+<tr>
+<td align="right">
+
+
+<IMG
+ WIDTH="365" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg301.gif"> </td>
+<td width="10" align="right">
+
+(13)</td>
+</tr>
+</table>
+Dividing through by <nowrap><IMG
+ WIDTH="16" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg273.gif">,</nowrap> this simplifies to 
+
+<P>
+<table width="100%">
+<tr>
+<td align="left">
+
+
+<IMG
+ WIDTH="257" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg302.gif"> </td>
+<td></td>
+</tr>
+<tr>
+<td align="right">
+
+
+<IMG
+ WIDTH="341" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg303.gif"> </td>
+<td width="10" align="right">
+
+(14)</td>
+</tr>
+</table>
+
+<P>
+Similarly, for <nowrap><IMG
+ WIDTH="19" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg276.gif">,</nowrap> 
+<div ALIGN="CENTER">
+
+
+ 
+<TABLE ALIGN="CENTER" CELLPADDING="0" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="32" HEIGHT="51" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg304.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="216" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg305.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(15)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="76" HEIGHT="54" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg306.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="439" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg307.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(16)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="32" HEIGHT="51" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg308.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="266" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg309.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(17)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+so the <a href="http://mathworld.wolfram.com/Euler-LagrangeDifferentialEquation.html"  target="_blank">Euler-Lagrange differential equation</a> <img src="http://scienceworld.wolfram.com/images/crossrefs/math.gif" width="12" height="12" alt="Eric Weisstein's World of Math"> for <IMG
+ WIDTH="19" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg276.gif"> becomes
+
+<div ALIGN="RIGHT">
+
+
+ 
+<TABLE WIDTH="100%" ALIGN="CENTER">
+<TR VALIGN="MIDDLE"><TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="508" HEIGHT="28" BORDER="0"
+ SRC="dimg310.gif"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(18)</TD></TR>
+</TABLE>
+<BR CLEAR="ALL"></DIV>
+
+<P>
+Dividing through by <nowrap><IMG
+ WIDTH="16" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg274.gif">,</nowrap> this simplifies to 
+
+<div ALIGN="RIGHT">
+
+
+ 
+<TABLE WIDTH="100%" ALIGN="CENTER">
+<TR VALIGN="MIDDLE"><TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="472" HEIGHT="28" BORDER="0"
+ SRC="dimg311.gif"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(19)</TD></TR>
+</TABLE>
+<BR CLEAR="ALL"></div>
+
+<div ALIGN="CENTER">
+<IMG
+ WIDTH="488" HEIGHT="145" BORDER="0"
+ SRC="dimg312.gif"> </DIV>
+
+<P>
+<IMG
+  WIDTH="268" HEIGHT="223" ALIGN="BOTTOM" BORDER="0"
+ SRC="gifs/doublepe.gif"> <P>
+The coupled second-order ordinary differential equations (14) and (19) can be solved numerically for <IMG
+ WIDTH="37" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg313.gif"> and
+<nowrap><IMG
+ WIDTH="37" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg314.gif">,</nowrap> as illustrated above for one particular choice of parameters and initial conditions.  Plotting the resulting
+solutions quickly reveals the complicated motion.
+
+<P>
+The equations of motion can also be written in the Hamiltonian formalism.  Computing the generalized momenta gives
+
+<div ALIGN="CENTER">
+
+
+ 
+<TABLE ALIGN="CENTER" CELLPADDING="0" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="25" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg315.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="318" HEIGHT="51" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg316.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(20)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="25" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg317.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="269" HEIGHT="51" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg318.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(21)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+The <a href="Hamiltonian.html">Hamiltonian</a> is then given by
+
+<P>
+<table width="100%">
+<tr>
+<td align="left">
+
+
+<IMG
+ WIDTH="485" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg319.gif">
+</td>
+<td></td>
+</tr>
+<tr>
+<td align="right">
+
+
+<IMG
+ WIDTH="258" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg320.gif"> </td>
+<td width="10" align="right">
+
+(22)</td>
+</tr>
+</table>
+
+<P>
+Solving (20) and (21) for <IMG
+ WIDTH="19" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg321.gif"> and <IMG
+ WIDTH="19" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg322.gif"> and plugging back in to (22) and simplifying
+gives
+
+<P>
+<table width="100%">
+<tr>
+<td align="left">
+
+
+<IMG
+ WIDTH="336" HEIGHT="48" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg323.gif">
+</td>
+<td></td>
+</tr>
+<tr>
+<td align="right">
+
+
+<IMG
+ WIDTH="261" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg324.gif"> </td>
+<td width="10" align="right">
+
+(23)</td>
+</tr>
+</table>
+
+<P>
+This leads to the <a href="HamiltonsEquations.html">Hamilton's equations</a>
+
+<div ALIGN="CENTER">
+
+
+ 
+<TABLE ALIGN="CENTER" CELLPADDING="0" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="19" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg325.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="248" HEIGHT="53" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg326.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(24)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="19" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg327.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="329" HEIGHT="53" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg328.gif"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(25)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="25" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg329.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="287" HEIGHT="51" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg330.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(26)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP ALIGN="RIGHT"><IMG
+ WIDTH="25" HEIGHT="29" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg331.gif"></TD> <TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg56.gif"></TD> <TD ALIGN="LEFT" NOWRAP><IMG
+ WIDTH="239" HEIGHT="51" ALIGN="MIDDLE" BORDER="0"
+ SRC="dimg332.gif"></TD> <TD WIDTH=10 ALIGN="RIGHT">
+(27)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+<P>
+where
+<div ALIGN="RIGHT">
+
+
+ 
+<TABLE WIDTH="100%" ALIGN="CENTER">
+<TR VALIGN="MIDDLE"><TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="227" HEIGHT="45" BORDER="0"
+ SRC="dimg333.gif"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(28)</TD></TR>
+</TABLE>
+<BR CLEAR="ALL"></DIV>
+
+<P>
+and
+
+<div ALIGN="RIGHT">
+
+
+ 
+<TABLE WIDTH="100%" ALIGN="CENTER">
+<TR VALIGN="MIDDLE"><TD ALIGN="CENTER" NOWRAP><IMG
+ WIDTH="496" HEIGHT="47" BORDER="0"
+ SRC="dimg334.gif"></TD>
+<TD WIDTH=10 ALIGN="RIGHT">
+(29)</TD></TR>
+</TABLE>
+<BR CLEAR="ALL"></DIV>
+
+<P>
+
+<P>
+<IMG
+  WIDTH="52" HEIGHT="13" ALIGN="LEFT"
+ SRC="/images/entries/see_also.gif"><a href="CoupledPendula.html">Coupled Pendula</a>, <a href="Hamiltonian.html">Hamiltonian</a>, <a href="Lagrangian.html">Lagrangian</a>, <a href="Pendulum.html">Pendulum</a> 
+<P>
+
+
+<P>
+<br clear=all>
+<img src="/images/entries/underline.gif" width="300" height="3" alt=""><br><br>
+<img src="/images/entries/references.gif" width="67" height="13" alt="References">
+<div class="references">
+<P>
+
+<P>
+Arnold, V.&nbsp;I. Problem in <a href="http://www.amazon.com/exec/obidos/ASIN/0387968903/ref=nosim/ericstreasuretro" target="_blank"><i>Mathematical Methods of Classical Mechanics, 2nd ed.</i></a> New York: Springer-Verlag, p.&nbsp;109, 1989.
+<P>
+Wells, D.&nbsp;A. <a href="http://www.amazon.com/exec/obidos/ASIN/0070692580/ref=nosim/ericstreasuretro" target="_blank"><i>Theory and Problems of Lagrangian Dynamics.</i></a> New York: McGraw-Hill, pp.&nbsp;13-14, 24, and 320-321, 1967.
+<P>
+
+<P>
+</div>
+
+<P>
+
+<P>
+
+<p>
+<BR>
+
+<br>
+<div class="copyright">
+<i>&copy; 1996-2007 Eric W. Weisstein</i>
+
+<p>
+</div>
+
+</td>
+</tr>
+
+<tr>
+<td colspan="6"><img src="/images/gradient-teal.gif" alt="" height="2"></td>
+</tr><tr>
+<td colspan="6"><p><br>
+<br>
+<img src="/images/entries/underline.gif" width="300" height="3" alt="">
+<br><br>
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<td colspan="4" align="left" valign="top">
+<img src="/images/related/related_products.gif" alt="header" width="227" height="10" border="0" alt="Related Wolfram Research Products"><br>
+</td>
+</tr>
+
+
+
+<tr>
+<td align="left" valign="top">
+<nobr><a href="http://www.wolfram.com/products/mathematica/" target="_blank"><img 
+src="/images/related/product-mathematica.gif" alt="mathematica" border="0"></a>
+</nobr>
+</td>
+<td align="left" valign="top">
+<nobr><a href="http://www.wolfram.com/products/calccenter/" target="_blank"><img 
+src="/images/related/product-calccenter.gif" alt="calccenter" border="0"></a>
+</nobr>
+</td>
+<td align="left" valign="top">
+<nobr><a href="http://www.wolfram.com/products/applications/mechsystems/" target="_blank"><img 
+src="/images/related/appack.gif" alt="" border="0" width="37" height="24"><img 
+src="/images/related/appack-mechsystems.gif" alt="mechsystems" border="0"></a>
+</nobr>
+</td>
+</tr>
+</table>
+
+
+
+</td>
+
+</table>
+</td>
+</tr>
+
+
+<td><img src="/images/spacer.gif" width="10"></td>
+</tr>
+</table>
+
+
+</body>
+</html>
