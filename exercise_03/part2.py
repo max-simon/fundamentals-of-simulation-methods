@@ -5,7 +5,7 @@ import sys
 
 
 # number of particles
-n = 100000
+n = 100
 
 simulation = tree.Tree(1)
 
@@ -14,12 +14,4 @@ for i in range(0, n):
     if not success:
         break
 
-
-acc_old = simulation.calculate_acc_the_old_way(2)
-acc_new = simulation.calculate_acc(2)
-
-#simulation.print_tree()
-#simulation.proof_all_particles()
-print("old way: acc =", acc_old)
-print("new way: acc =", acc_new)
-print("eta = ", np.linalg.norm(acc_new - acc_old)/np.linalg.norm(acc_old))
+simulation.analyze(0.8)
