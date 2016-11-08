@@ -52,6 +52,8 @@ ax2.set_title("Relative mean error")
 plt.savefig("evaluation.png")
 
 
+#TODO: Welche Skala?
+
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
 
 ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
