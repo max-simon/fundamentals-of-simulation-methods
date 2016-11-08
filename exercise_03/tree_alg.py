@@ -43,7 +43,6 @@ class Node:
 
         self.com = None # np-array of center of mass, will be calculated
         self.mass = 0 # mass, will be calculated
-        self.quadrupole = 0
 
         self.subnodes = None # later a list of indices of the subnodes
         self.mothernode_global_index = mother_node_index # index of nearest node
@@ -241,9 +240,6 @@ class Tree:
                 node.mass += subnode.mass
                 node.com = node.com + (subnode.mass * subnode.com)
 
-            # TODO: how to calculate the rest (quadrupoles)
-            # now uses all inner particles.
-            node.quadrupole = self.calc_quadrupol_matrix(node)
 
             # only com if mass is not 0
             node.com = node.com/node.mass if node.mass != 0 else None
@@ -258,10 +254,6 @@ class Tree:
                 node.mass += particle.mass
                 node.com = node.com + (particle.mass * particle.position)
 
-            # TODO: how to calculate the rest (quadrupoles)
-            # now uses all inner particles.
-            node.quadrupole = self.calc_quadrupol_matrix(node)
-
             # only com if mass is not 0
             node.com = node.com/node.mass if node.mass != 0 else None
 
@@ -274,27 +266,6 @@ class Tree:
             angle: opening-angle in rad
         """
         return node.length / norm(y) if norm(y) != 0 else None
-
-    # maybe useless
-    def calc_quadrupol_matrix(self, node):
-        """
-        Calculates the quadrupole-matrix.
-        @param
-        @return
-            matrix: numpy-matrix
-        """
-        q_m = np.array([])
-        for i in range(3):
-            for j in range(i, 3):
-                q = 0
-                # loop over all inner particles -> only over subnodes?
-                for particle_index in node.inner_particles:
-                    particle = self.all_particles[particle_index]
-                    cron_delta = 1 if i == j else 0
-                    q += particle.mass*(3*(np.dot(node.com[i] - particle.position[i], node.com[j] - particle.position[j]) - cron_delta*norm(node.com - particle.position)**2))
-                q_m = np.append(q_m, q)
-
-        return np.array([[q_m[0], q_m[1], q_m[2]], [q_m[1], q_m[3], q_m[4]], [q_m[2], q_m[4], q_m[5]]])
 
     def get_acc_for(self, node, particle_index, term_counter = 0):
         """
@@ -329,9 +300,6 @@ class Tree:
 
             # monopole
             acc = acc - node.mass * y/((norm(y)**2 + self.softening**2)**(3/2))
-
-            # quadrupole
-            #acc = acc +  ((2 * np.dot(node.quadrupole, y) * norm(y)**5 + 10 * y * norm(y)**4 * np.dot(y, np.dot(node.quadrupole, y)))/(norm(y)**10))
 
             term_counter += 1
 
@@ -389,16 +357,19 @@ class Tree:
         @param:
         @return:
         """
+        print("Proof positions of all particles...")
         for particle in self.all_particles:
             # load node the particle claims to belong to
             node = self.all_nodes[particle.mother_node]
             # if the particle is out of this node
             if (np.abs(node.center - particle.position) > np.array([node.length/2 for i in range(3)])).any():
-                print("ERROR: Particle %d in wrong node" % particle.global_particle_index)
-                print("   ", "Node-Center: (%1.6f, %1.6f, %1.6f), Node-Length: %1.6f, Particle-Position: (%1.6f, %1.6f, %1.6f)" % (*node.center, node.length, *particle.position))
+                print("\tERROR: Particle %d in wrong node" % particle.global_particle_index)
+                print("\t   ", "Node-Center: (%1.6f, %1.6f, %1.6f), Node-Length: %1.6f, Particle-Position: (%1.6f, %1.6f, %1.6f)" % (*node.center, node.length, *particle.position))
             # if there are subnodes the particle can also belong to
             if node.subnodes != None:
-                print("WARNING: The node %d has subnodes. The particle %d may should be in one of those." % (particle.mother_node, particle.global_particle_index))
+                print("\tWARNING: The node %d has subnodes. The particle %d may should be in one of those." % (particle.mother_node, particle.global_particle_index))
+        print("\tFinished.")
+
 
     def print_node(self, node_index):
         """
@@ -441,6 +412,9 @@ class Tree:
         @param:
             threshold: the threshold for the opening angle
             single_particles: list of indices particles one want to analyze. If False, all particles are used for analysation
+            proof_particles: boolean, whether the method proof_all_particles should be called.
+        @return
+            n, theta, t_exact, t_tree
         """
         # initialise list of particles used for the analysation
         if single_particles != False:
@@ -450,7 +424,6 @@ class Tree:
 
         # proof particles?
         if proof_particles:
-            print("Proof positions of all particles...")
             self.proof_all_particles()
 
         # exact
@@ -493,13 +466,13 @@ class Tree:
         # output
         print("Analysation: N = {:d} particles, threshold = {:1.3f}, total mass: {:3.3f}".format(len(particles), self.opening_threshold, self.root.mass))
         print("\tExact:")
-        print("\t\ttime: {:1.6f}".format(time_of_exact))
+        print("\t\ttime: {:1.6f}sec".format(time_of_exact))
         print("\tTree:")
-        print("\t\ttime: {:1.6f}".format(time_of_tree))
+        print("\t\ttime: {:1.6f}sec".format(time_of_tree))
         print("\t\tmean relative error: {:2.5f}".format(eta))
         print("\t\tmean used nodes: {:4.2f}".format(total_terms))
 
-        return len(particles), threshold, time_of_exact, time_of_tree, eta 
+        return len(particles), threshold, time_of_exact, time_of_tree, eta
 
     def reset(self):
         """
@@ -534,6 +507,7 @@ class Tree:
 
         t0 = time()
         for i in range(n):
+            progressBar("\tProgress", i, n) # update command line
             pos = np.array([-init_length/2 + distribution()*init_length, -init_length/2 + distribution()*init_length, -init_length/2 + distribution()*init_length])
             success = tree.insert_particle(pos, mass_function(n, *pos))
             if not success:
@@ -542,7 +516,7 @@ class Tree:
 
         print("\tInserted {:d} particles".format(len(tree.all_particles)))
         print("\t{:d} nodes created".format(len(tree.all_nodes)))
-        print("\tTime needed: {:3.3f}".format(t1 - t0))
+        print("\tTime needed: {:3.3f}sec".format(t1 - t0))
 
         return tree
 

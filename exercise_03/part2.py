@@ -1,13 +1,13 @@
 import numpy as np
 import tree_alg as tree
 from random import random
-
+import time
 from matplotlib import pyplot as plt
 
 
 # number of particles
-ns = [200, 300, 400] # n's we want to test
-thetas = [0.4] # thetas we want to test
+ns = [5000, 10000, 20000, 40000] # n's we want to test
+thetas = [0.2, 0.4, 0.8] # thetas we want to test
 
 probability_distribution = random # use a uniform distribution for placements of the particles
 mass_function = lambda n, x, y, z: 1/n # every particle should have the same mass of 1/n
@@ -19,12 +19,15 @@ all_time_tree = np.array([])
 all_eta = np.array([])
 all_theta = np.array([])
 
+
+t0 = time.time()
+
 # loop over grid
 for n in ns:
     for theta in thetas:
         print("\n----- N = {:d}, Theta = {:1.2f} -----".format(n, theta))
         simulation = tree.Tree.init_a_tree(n, probability_distribution, mass_function)
-        n, threshold, time_of_exact, time_of_tree, eta = simulation.analyze(theta)
+        n, threshold, time_of_exact, time_of_tree, eta = simulation.analyze(theta, proof_particles=True)
 
         all_n = np.append(all_n, n)
         all_theta = np.append(all_theta, theta)
@@ -35,50 +38,60 @@ for n in ns:
 
 #### Plotting
 
-theta_of_interest = 0.4
-print("\n\nPlot evaluation for Theta = {:1.2f}".format(theta_of_interest))
+for theta_of_interest in all_theta:
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
+    print("\n\nPlot evaluation for Theta = {:1.2f}".format(theta_of_interest))
 
-ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
-ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
-ax1.set_ylabel("seconds")
-ax1.set_title("Comparism of durations")
-ax1.legend(loc=2)
-ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
-ax2.legend(loc=2)
-ax2.set_title("Relative mean error")
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
 
-plt.savefig("evaluation.png")
+    ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
+    ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
+    ax1.set_ylabel("seconds")
+    ax1.set_title("Comparism of durations")
+    ax1.legend(loc=2)
+    ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
+    ax2.legend(loc=2)
+    ax2.set_title("Relative mean error")
+
+    plt.savefig("evaluation_%d.png"  % int(theta_of_interest*10))
 
 
-#TODO: Welche Skala?
+    #TODO: Welche Skala?
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
 
-ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
-ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
-ax1.set_ylabel("seconds")
-ax1.set_title("Comparism of durations")
-ax1.set_xscale("log")
-ax1.legend(loc=2)
-ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
-ax2.legend(loc=2)
-ax2.set_title("Relative mean error")
+    ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
+    ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
+    ax1.set_ylabel("seconds")
+    ax1.set_title("Comparism of durations")
+    ax1.set_xscale("log")
+    ax1.legend(loc=2)
+    ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
+    ax2.legend(loc=2)
+    ax2.set_title("Relative mean error")
 
-plt.savefig("evaluation1.png")
+    plt.savefig("evaluation1_%d.png" % int(theta_of_interest*10))
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
 
-ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
-ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
-ax1.set_ylabel("seconds")
-ax1.set_title("Comparism of durations")
-ax1.set_xscale("log")
-ax1.set_yscale("log")
-ax1.legend(loc=2)
-ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
-ax2.legend(loc=2)
-ax2.set_title("Relative mean error")
+    ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
+    ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
+    ax1.set_ylabel("seconds")
+    ax1.set_title("Comparism of durations")
+    ax1.set_xscale("log")
+    ax1.set_yscale("log")
+    ax1.legend(loc=2)
+    ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
+    ax2.legend(loc=2)
+    ax2.set_title("Relative mean error")
 
-plt.savefig("evaluation2.png")
+    plt.savefig("evaluation2_%d.png" % int(theta_of_interest*10))
+
+
+t1 = time.time()
+
+print("All n, theta", all_n, all_theta)
+print("All exact time", all_time_exact)
+print("All tree time", all_time_tree)
+print("All eta", all_eta)
+print("Total time:", t1 - t0, "sec")

@@ -16,13 +16,19 @@
 % Kopfzeile
 \usepackage{scrlayer-scrpage}
 \pagestyle {scrheadings}
-\rohead*{Max Simon\\3295271}
+\rohead*{Kevin Lange\\Max Simon}
 
 \begin{document}
 	
-	\part*{Exercise Sheet 03}
-	
-	
+	\part*{Exercise Sheet 03}	
+	\section*{Part 2}
+	For a better understanding of the algorithm, we implemented it in Python (see \emph{tree_alg.py}). The code is not performant nor optimized for memory consumption, but gives opportunities to check the workflow. For example one can use the method \emph{proof_all_particles} to proof, if all particles are in the right node, can print out the whole tree (with \emph{print_tree}) and has some informational output. The code has a good documentation, so we don't want to explain it here.\\
+	\\
+	We inserted N = 5000, 10000, 20000 and 40000 particles (uniformly distributed in the box with a mass of \frac{1}{N}) for different opening angles thresholds ($\Theta = 0.2, 0.4 \text{and} 0.8$). This is done by the static method \emph{init_a_tree}.\\
+	\\
+	The \emph{analyzing} method do an exact calculation and an calculation using the tree method. Afterwards it prints out the used time for both calculations, the mean value of $\eta$ and the mean number of nodes used for the calculation of one particle.\\
+	\\
+	In the \emph{part2.py} script we initialize and start the simulations. Afterwards the measured times and the mean $\eta$ depending on N are plotted for each $\theta$. The results can be found in %TODO!!! 
 	
 	
 \end{document}
