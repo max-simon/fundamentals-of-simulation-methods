@@ -2,6 +2,8 @@ import numpy as np
 from numpy.linalg import norm
 from time import time
 
+import sys
+
 
 class Particle:
     def __init__(self, position, mass, tree):
@@ -41,6 +43,8 @@ class Node:
 
         self.com = None # np-array of center of mass, will be calculated
         self.mass = 0 # mass, will be calculated
+        self.quadrupole = 0
+
         self.subnodes = None # later a list of indices of the subnodes
         self.mothernode_global_index = mother_node_index # index of nearest node
         self.inner_particles = [] # list of particles, which are inside this node (all!)
@@ -73,7 +77,6 @@ class Tree:
         self.max_sublevels = 50 # maximal depth
         self.softening = 1e-3 # softening factor
 
-    # Register nodes and particles
     def register_node(self, node):
         """
         Register a node in the tree.
@@ -230,7 +233,6 @@ class Tree:
             node.mass = 0
             node.com = np.array([0, 0, 0])
 
-            # TODO: how to calculate the rest (quadrupoles)
             # mass and com
             for subnode_index in node.subnodes:
                 subnode = self.all_nodes[subnode_index]
@@ -239,6 +241,10 @@ class Tree:
                 node.mass += subnode.mass
                 node.com = node.com + (subnode.mass * subnode.com)
 
+            # TODO: how to calculate the rest (quadrupoles)
+            # now uses all inner particles.
+            node.quadrupole = self.calc_quadrupol_matrix(node)
+
             # only com if mass is not 0
             node.com = node.com/node.mass if node.mass != 0 else None
 
@@ -246,12 +252,16 @@ class Tree:
             node.mass = 0
             node.com = np.array([0, 0, 0])
 
-            # TODO: how to calculate the rest (quadrupole)
             # mass and com
             for particle_index in node.inner_particles:
                 particle = self.all_particles[particle_index]
                 node.mass += particle.mass
                 node.com = node.com + (particle.mass * particle.position)
+
+            # TODO: how to calculate the rest (quadrupoles)
+            # now uses all inner particles.
+            node.quadrupole = self.calc_quadrupol_matrix(node)
+
             # only com if mass is not 0
             node.com = node.com/node.mass if node.mass != 0 else None
 
@@ -321,8 +331,7 @@ class Tree:
             acc = acc - node.mass * y/((norm(y)**2 + self.softening**2)**(3/2))
 
             # quadrupole
-            # q = self.calc_quadrupol_matrix(node)
-            # acc = acc +  ((2 * np.dot(q, y) * norm(y)**5 + 10 * y * norm(y)**4 * np.dot(y, np.dot(q, y)))/(np.abs(y)**10))
+            #acc = acc +  ((2 * np.dot(node.quadrupole, y) * norm(y)**5 + 10 * y * norm(y)**4 * np.dot(y, np.dot(node.quadrupole, y)))/(norm(y)**10))
 
             term_counter += 1
 
@@ -426,45 +435,122 @@ class Tree:
         """
         self.print_node(0)
 
-    def analyze(self, threshold, single_particles = False):
+    def analyze(self, threshold, single_particles = False, proof_particles = False):
+        """
+        Analysing the tree algorithm in comparism to exact method.
+        @param:
+            threshold: the threshold for the opening angle
+            single_particles: list of indices particles one want to analyze. If False, all particles are used for analysation
+        """
+        # initialise list of particles used for the analysation
         if single_particles != False:
             particles = single_particles
         else:
             particles = range(len(self.all_particles))
 
+        # proof particles?
+        if proof_particles:
+            print("Proof positions of all particles...")
+            self.proof_all_particles()
+
         # exact
+        print("Started exact calculation...")
         all_exact = []
-        t0 = time()
-        for particle_index in particles:
+        t0 = time() # take starting time point
+        counter = 0
+        for particle_index in particles: # loop over particles in the list
+            progressBar("\tProgress", counter, len(particles)) # update command line
             acc_exact = self.calculate_acc_exact(particle_index)
-            all_exact.append(acc_exact)
-        t1 = time()
+            all_exact.append(acc_exact) # save for later analysation
+            counter += 1
+        t1 = time() # take end time point
         time_of_exact = t1 - t0
+        print("\tFinished.")
 
         # tree
+        print("Started calculation with tree method...")
         total_terms = 0
         all_tree = []
         t0 = time()
-        for particle_index in particles:
+        counter = 0
+        for particle_index in particles: # loop over particles in the list
+            progressBar("\tProgress", counter, len(particles)) # update command line
             acc_tree, terms_used = self.calculate_acc(particle_index, threshold)
-            all_tree.append(acc_tree)
-            total_terms += terms_used
+            all_tree.append(acc_tree) # save for later analysation
+            total_terms += terms_used # save for later analysation
+            counter += 1
         t1 = time()
         time_of_tree = t1 - t0
         total_terms = total_terms/len(particles)
+        print("\tFinished")
 
         # Analysation
         eta = 0
         for i in range(len(particles)):
-            eta += norm(all_exact[i] - all_tree[i])/norm(all_exact[i])
+            eta += norm(all_exact[i] - all_tree[i])/norm(all_exact[i]) # calculate mean error
         eta = eta/len(particles)
 
-
-
-        print("Analysation: N = {:d} particles, threshold = {:1.3f}".format(len(particles), self.opening_threshold))
+        # output
+        print("Analysation: N = {:d} particles, threshold = {:1.3f}, total mass: {:3.3f}".format(len(particles), self.opening_threshold, self.root.mass))
         print("\tExact:")
         print("\t\ttime: {:1.6f}".format(time_of_exact))
         print("\tTree:")
         print("\t\ttime: {:1.6f}".format(time_of_tree))
         print("\t\tmean relative error: {:2.5f}".format(eta))
         print("\t\tmean used nodes: {:4.2f}".format(total_terms))
+
+        return len(particles), threshold, time_of_exact, time_of_tree, eta 
+
+    def reset(self):
+        """
+        Resets the complete tree.
+        @param
+        @return
+        """
+        # reset to initial values
+        self.opening_threshold = 0
+        self.all_nodes = []
+        self.root = None
+        self.all_particles = []
+        self.multipoles_up_to_date = False
+        self.max_nodes = 500000
+        self.max_sublevels = 50
+        self.softening = 1e-3
+
+    @staticmethod
+    def init_a_tree(n, distribution, mass_function, init_length = 1, tree = None):
+        """
+        Initialise a tree with n particles and a given distribution function.
+        @param:
+            n: number of particles
+            distribution: probability-distribution for placement of the particles
+            mass of particles: function of n, x, y and z, which return the mass of the particle
+        @return
+        """
+        # create a tree object
+        if tree == None:
+            tree = Tree(init_length)
+            print("Created a new tree...")
+
+        t0 = time()
+        for i in range(n):
+            pos = np.array([-init_length/2 + distribution()*init_length, -init_length/2 + distribution()*init_length, -init_length/2 + distribution()*init_length])
+            success = tree.insert_particle(pos, mass_function(n, *pos))
+            if not success:
+                break
+        t1 = time()
+
+        print("\tInserted {:d} particles".format(len(tree.all_particles)))
+        print("\t{:d} nodes created".format(len(tree.all_nodes)))
+        print("\tTime needed: {:3.3f}".format(t1 - t0))
+
+        return tree
+
+
+def progressBar(title, value, endvalue, bar_length=20):
+    percent = float(value) / endvalue
+    arrow = '-' * int(round(percent * bar_length)-1) + '>'
+    spaces = ' ' * (bar_length - len(arrow))
+
+    sys.stdout.write("\r{0}: [{1}] {2}%".format(title, arrow + spaces, int(round(percent * 100))))
+    sys.stdout.flush()
