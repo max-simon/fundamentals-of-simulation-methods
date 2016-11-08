@@ -1,97 +1,36 @@
 import numpy as np
-import tree_alg as tree
-from random import random
-import time
 from matplotlib import pyplot as plt
+from scipy.optimize import curve_fit
+
+# load data
+n, theta, t_tree, m_used_nodes, t_exact, err = np.loadtxt("results.txt", skiprows=1, unpack=True)
 
 
-# number of particles
-ns = [5000, 10000, 20000, 40000] # n's we want to test
-thetas = [0.2, 0.4, 0.8] # thetas we want to test
 
-probability_distribution = random # use a uniform distribution for placements of the particles
-mass_function = lambda n, x, y, z: 1/n # every particle should have the same mass of 1/n
+# loop over angles
+for th in theta:
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+    fig.suptitle("$\\theta = {:1.2f}$".format(th))
 
-# variables for analysation
-all_n = np.array([])
-all_time_exact = np.array([])
-all_time_tree = np.array([])
-all_eta = np.array([])
-all_theta = np.array([])
-
-
-t0 = time.time()
-
-# loop over grid
-for n in ns:
-    for theta in thetas:
-        print("\n----- N = {:d}, Theta = {:1.2f} -----".format(n, theta))
-        simulation = tree.Tree.init_a_tree(n, probability_distribution, mass_function)
-        n, threshold, time_of_exact, time_of_tree, eta = simulation.analyze(theta, proof_particles=True)
-
-        all_n = np.append(all_n, n)
-        all_theta = np.append(all_theta, theta)
-        all_time_exact = np.append(all_time_exact, time_of_exact)
-        all_time_tree = np.append(all_time_tree, time_of_tree)
-        all_eta = np.append(all_eta, eta)
-
-
-#### Plotting
-
-for theta_of_interest in all_theta:
-
-    print("\n\nPlot evaluation for Theta = {:1.2f}".format(theta_of_interest))
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
-
-    ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
-    ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
-    ax1.set_ylabel("seconds")
-    ax1.set_title("Comparism of durations")
-    ax1.legend(loc=2)
-    ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
-    ax2.legend(loc=2)
-    ax2.set_title("Relative mean error")
-
-    plt.savefig("evaluation_%d.png"  % int(theta_of_interest*10))
-
-
-    #TODO: Welche Skala?
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
-
-    ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
-    ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
-    ax1.set_ylabel("seconds")
-    ax1.set_title("Comparism of durations")
+    ax1.plot(n[theta == th], t_exact[theta == th], label="Exact summation")
+    ax1.plot(n[theta == th], t_tree[theta == th], label="Tree algorhitm")
     ax1.set_xscale("log")
+    ax1.set_title("Duration")
+    ax1.set_ylabel("Time [sec]")
     ax1.legend(loc=2)
-    ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
-    ax2.legend(loc=2)
-    ax2.set_title("Relative mean error")
 
-    plt.savefig("evaluation1_%d.png" % int(theta_of_interest*10))
+    ax2.plot(n[theta == th], err[theta == th])
+    ax2.set_title("Mean Error per particle")
+    ax2.set_xlabel("Number of particles")
+    ax2.legend(loc=4)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10), sharex=True)
-
-    ax1.plot(all_n[all_theta == theta_of_interest], all_time_exact[all_theta == theta_of_interest], label="Time of exact calculation")
-    ax1.plot(all_n[all_theta == theta_of_interest], all_time_tree[all_theta == theta_of_interest], label="Time of tree calculation")
-    ax1.set_ylabel("seconds")
-    ax1.set_title("Comparism of durations")
-    ax1.set_xscale("log")
-    ax1.set_yscale("log")
-    ax1.legend(loc=2)
-    ax2.plot(all_n[all_theta == theta_of_interest], all_eta[all_theta == theta_of_interest], label="Mean relative error")
-    ax2.legend(loc=2)
-    ax2.set_title("Relative mean error")
-
-    plt.savefig("evaluation2_%d.png" % int(theta_of_interest*10))
+    plt.savefig("eval_th_{:d}.png".format(int(th*10)))
 
 
-t1 = time.time()
-
-print("All n, theta", all_n, all_theta)
-print("All exact time", all_time_exact)
-print("All tree time", all_time_tree)
-print("All eta", all_eta)
-print("Total time:", t1 - t0, "sec")
+# calculation of 10^10 particles
+coefficient_ex = t_exact/(n**2)
+coefficient_tree = t_tree/(np.log(n)*n)
+print(coefficient_tree)
+print("1e10 particles")
+print("\texact: {:3.10f} * N^2 = {:25f}sec".format(np.mean(coefficient_ex), np.mean(coefficient_ex)*(1e20)))
+print("\ttree: {:3.10f} * ln(N)*N = {:25f}sec".format(np.mean(coefficient_tree), np.mean(coefficient_tree)*np.log(1e10)*1e10))

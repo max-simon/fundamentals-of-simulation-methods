@@ -406,7 +406,7 @@ class Tree:
         """
         self.print_node(0)
 
-    def analyze(self, threshold, single_particles = False, proof_particles = False):
+    def analyze(self, thresholds, single_particles = False, proof_particles = False):
         """
         Analysing the tree algorithm in comparism to exact method.
         @param:
@@ -416,6 +416,9 @@ class Tree:
         @return
             n, theta, t_exact, t_tree
         """
+
+        print("\n----- N = {:d} -----".format(len(self.all_particles)))
+
         # initialise list of particles used for the analysation
         if single_particles != False:
             particles = single_particles
@@ -426,6 +429,7 @@ class Tree:
         if proof_particles:
             self.proof_all_particles()
 
+        #######
         # exact
         print("Started exact calculation...")
         all_exact = []
@@ -440,39 +444,54 @@ class Tree:
         time_of_exact = t1 - t0
         print("\tFinished.")
 
-        # tree
-        print("Started calculation with tree method...")
-        total_terms = 0
-        all_tree = []
-        t0 = time()
-        counter = 0
-        for particle_index in particles: # loop over particles in the list
-            progressBar("\tProgress", counter, len(particles)) # update command line
-            acc_tree, terms_used = self.calculate_acc(particle_index, threshold)
-            all_tree.append(acc_tree) # save for later analysation
-            total_terms += terms_used # save for later analysation
-            counter += 1
-        t1 = time()
-        time_of_tree = t1 - t0
-        total_terms = total_terms/len(particles)
-        print("\tFinished")
 
-        # Analysation
-        eta = 0
-        for i in range(len(particles)):
-            eta += norm(all_exact[i] - all_tree[i])/norm(all_exact[i]) # calculate mean error
-        eta = eta/len(particles)
+        ######
+        # tree
+        times_of_tree = []
+        etas = []
+        list_total_terms = []
+
+        for i in range(len(thresholds)):
+            print("Started calculation with tree method (Theta = {:1.3f})...".format(thresholds[i]))
+            total_terms = 0
+            all_tree = []
+            t0 = time()
+            counter = 0
+            for particle_index in particles: # loop over particles in the list
+                progressBar("\tProgress", counter, len(particles)) # update command line
+                acc_tree, terms_used = self.calculate_acc(particle_index, thresholds[i])
+                all_tree.append(acc_tree) # save for later analysation
+                total_terms += terms_used # save for later analysation
+                counter += 1
+                t1 = time()
+            time_of_tree = t1 - t0
+            total_terms = total_terms/len(particles)
+            print("\tFinished")
+
+            # Analysation
+            eta = 0
+            for i in range(len(particles)):
+                eta += norm(all_exact[i] - all_tree[i])/norm(all_exact[i]) # calculate mean error
+            eta = eta/len(particles)
+
+            times_of_tree.append(time_of_tree)
+            etas.append(eta)
+            list_total_terms.append(total_terms)
 
         # output
-        print("Analysation: N = {:d} particles, threshold = {:1.3f}, total mass: {:3.3f}".format(len(particles), self.opening_threshold, self.root.mass))
+        print("\n########################################")
+        print("Analysation: N = {:d} particles, total mass: {:3.3f}".format(len(particles), self.root.mass))
         print("\tExact:")
         print("\t\ttime: {:1.6f}sec".format(time_of_exact))
-        print("\tTree:")
-        print("\t\ttime: {:1.6f}sec".format(time_of_tree))
-        print("\t\tmean relative error: {:2.5f}".format(eta))
-        print("\t\tmean used nodes: {:4.2f}".format(total_terms))
 
-        return len(particles), threshold, time_of_exact, time_of_tree, eta
+        for i in range(len(thresholds)):
+            print("\tTree with Theta = {:1.3f}:".format(thresholds[i]))
+            print("\t\ttime: {:1.6f}sec".format(times_of_tree[i]))
+            print("\t\tmean relative error: {:2.5f}".format(etas[i]))
+            print("\t\tmean used nodes: {:4.2f}".format(list_total_terms[i]))
+
+        print("########################################")
+        return len(particles), thresholds, time_of_exact, times_of_tree, etas
 
     def reset(self):
         """

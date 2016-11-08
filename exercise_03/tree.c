@@ -36,7 +36,7 @@ typedef struct node_data
   node;
 
 
-#define  MAX_POINTS               5000      /* this sets the particle number that is used */
+#define  MAX_POINTS               40000      /* this sets the particle number that is used */
 static double opening_threshold = 0.8;      /* tree opening angle */
 static double eps               = 0.001;    /* gravitational softening length */
 
@@ -69,9 +69,6 @@ node *get_empty_node(void)
 
   return no;
 }
-
-
-
 
 
 /* this function determines the index (0-7) of one of the 8 subnodes in which
@@ -154,36 +151,26 @@ void calc_multipole_moments(node *current)
   if(current->suns[0])   /* do we have subnodes? */
     {
       /* yes, so let's first calculate their multipole moments */
-      for(n = 0; n < 8; n++) {
-        calc_multipole_moments(current->suns[n]);
-      }
+      for(n = 0; n < 8; n++)
+      calc_multipole_moments(current->suns[n]);
 
       /* initialize the node multipole moments to zero */
       current->mass  = 0;
-      for(j = 0; j < 3; j++) {
-        current->cm[j] = 0;
-      }
+      for(int j = 0; j < 3; j++)
+       current->cm[j] = 0;
 
-       /* TODO: Fill */
       /* now calculate the moment of the current node from those of its suns */
 
-      /*
-      calculation of mass: simple sum of all masses
-      calculation of cm[j]: sum_n(suns[n]->cm[j])
-      */
-      for(n = 0; n < 8; n++) {
-        current->mass += current->suns[n]->mass;
-        for(j = 0; j < 3; j++) {
-          current->cm[j] += current->suns[n]->mass * current->suns[n]->cm[j];
+      /* Done */
+      for(int n = 0; n < 8; n++) { // Loop over all subnodes
+        current->mass += current->suns[n]->mass; // calculate total mass
+        for(int j = 0; j < 3; j++) {
+          current->cm[j] += current->suns[n]->mass * current->suns[n]->cm[j]; // calculate M * center of mass
         }
       }
-      for(j = 0; j < 3; j++) {
-        current->cm[j] /= current->mass;
+      for(int j = 0; j < 3; j++) {
+        current->cm[j] = current->cm[j]/current->mass; // calculate center of mass
       }
-      /*
-      endtodo: Fill
-      */
-
 
     }
   else
@@ -200,9 +187,8 @@ void calc_multipole_moments(node *current)
 	{
 	  /* nothing in here at all; let's initialize the multipole moments to zero */
 	  current->mass  = 0;
-	  for(j = 0; j < 3; j++) {
+	  for(j = 0; j < 3; j++)
 	    current->cm[j] = 0;
-    }
 	}
     }
 }
@@ -221,10 +207,11 @@ double get_opening_angle(node *current, double pos[3])
 
 
 
-void walk_tree(node *current, double pos[3], double acc[3])
+double walk_tree(node *current, double pos[3], double acc[3], double counter)
 {
   int n;
   double theta;
+
 
   if(current->mass)   /* only do something if there is mass in this branch of the tree (i.e. if it is not empty) */
     {
@@ -235,17 +222,19 @@ void walk_tree(node *current, double pos[3], double acc[3])
        */
       if(theta < opening_threshold || current->p)
 	{
-      /* TODO: Fill */
 	  /*
-	   *     acc[0] += ....
-	   *     acc[1] += ....
-	   *     acc[2] += ....
+	   Done
 	   */
-
-     for(j = 0; j < 3; j++) {
-       acc[j] += get_acceleration(current, pos);
+     double y[3]; // calculate y-vector
+     for(int i = 0; i < 3; i++) {
+       y[i] = pos[i] - current->cm[i];
      }
+     double norm_y = sqrt(y[0]*y[0] + y[1]*y[1] + y[2]*y[2]);
 
+     for(int i = 0; i < 3; i++) {
+       acc[i] -= current->mass * y[i]/pow((norm_y*norm_y) + (eps * eps), 3/2); // see exercise sheet for formula
+     }
+     counter += 1; // count, how many nodes were used
 
 	}
       else
@@ -254,9 +243,10 @@ void walk_tree(node *current, double pos[3], double acc[3])
 
 	  if(current->suns[0])             /* make sure that we actually have subnodes */
 	    for(n=0; n<8; n++)
-	      walk_tree(current->suns[n], pos, acc);
+	      counter = walk_tree(current->suns[n], pos, acc, counter);
 	}
     }
+  return counter;
 }
 
 
@@ -289,10 +279,8 @@ int main(int argc, char **argv)
     root->center[j] = 0.5;
 
   /* insert the particles into the tree */
-  for(i=0; i < N; i++) {
+  for(i=0; i < N; i++)
     insert_particle(root, &star[i]);
-  }
-
 
   /* calculate the multipole moments */
   calc_multipole_moments(root);
@@ -301,6 +289,8 @@ int main(int argc, char **argv)
   /* set a timer */
   t0 = (double) clock();
 
+  double counter = 0; // count, how many nodes were opened (for all particles)
+
   /* now calculate the accelerations with the tree */
   for(i = 0; i < N; i++)
     {
@@ -308,60 +298,70 @@ int main(int argc, char **argv)
 	     star[i].acc_tree[j] = 0;
      }
 
-      walk_tree(root, star[i].pos, star[i].acc_tree);
+      counter = walk_tree(root, star[i].pos, star[i].acc_tree, counter);
     }
 
+  double mean_used_nodes = counter/N;
   t1 = (double) clock();
-  printf("\nforce calculation with tree took:        %8g sec\n", (t1 - t0) / CLOCKS_PER_SEC);
+  double time_tree = (t1 - t0) / CLOCKS_PER_SEC;
+  printf("\nforce calculation with tree took:        %8g sec\n", time_tree);
+  printf("\nper particle %8g nodes were used", mean_used_nodes);
 
 
   t0 = (double) clock();
 
   /* now calculate the accelerations with direct summation, for comparison */
-  /*
-   *     star[i].acc_exact[0] = ....
-   *     star[i].acc_exact[0] = ....
-   *     star[i].acc_exact[0] = ....
-   */
-
-  double epsilon = 1e-3; // To avoid dividing by zero
-  for(i = 0; i < N; i++)
+  for(int i = 0; i < N; i++)
     {
-      for(j = 0; j < 3; j++) {
-        star[i].acc_exact[j] = 0;
-      }
-      for(k = 0; k < N; k++) { // loop over other stars
-        double distance_square = pow(star[i].pos[0] - star[k].pos[0], 2) + pow(star[i].pos[1] - star[k].pos[1], 2) + pow(star[i].pos[2] - star[k].pos[2], 2);
-        double divisor = pow(distance_square + pow(epsilon, 2), 3/2);
-
-        for(j = 0; j < 3; j++) {
-          star[i].acc_exact[j] += star[k].mass * (star[i].pos[j] - star[k].pos[j])/divisor;
-        }
-
-      }
-
-
-
-
+	  /*
+	   Done
+	   */
+     for(int k = 0; k < 3; k++) { // initialize to 0
+       star[i].acc_exact[k] = 0;
+     }
+     for(int j = 0; j < N; j++) { // loop over all other particles
+       if(j == i) { // if it is the same particle
+         continue;
+       }
+       // calculate distance
+       double norm_d = sqrt(pow(star[i].pos[0] - star[j].pos[0], 2) + pow(star[i].pos[1] - star[j].pos[1], 2) + pow(star[i].pos[2] - star[j].pos[2], 2));
+       for(int k = 0; k < 3; k++) {
+         star[i].acc_exact[k] -= star[j].mass * (star[i].pos[k] - star[j].pos[k])/pow(norm_d*norm_d + (eps * eps), 3/2); // see sheet.pdf for formula
+       }
+     }
     }
 
   t1 = (double) clock();
-  printf("\ncalculation with direct summation took:  %8g sec\n", (t1 - t0) / CLOCKS_PER_SEC);
+  double time_exact = (t1 - t0) / CLOCKS_PER_SEC;
+  printf("\ncalculation with direct summation took:  %8g sec\n", time_exact);
 
   /* now do the calculation of the mean relative error
    */
 
+  /* Done */
   double err_sum = 0;
-
-  /* TODO: Fill */
-  /*
-   * ..... TO BE FILLED IN ....
-   *
-   */
-
+  double diff[3] = {0};
+  double norm_exact = 0;
+  double norm_diff = 0;
+  for(int i = 0; i < N; i++) {
+    norm_exact = sqrt(pow(star[i].acc_exact[0], 2) + pow(star[i].acc_exact[1], 2) + pow(star[i].acc_exact[2], 2));
+    for(int j = 0; j < 3; j++) {
+      diff[j] = star[i].acc_exact[j] - star[i].acc_tree[j];
+    }
+    norm_diff = sqrt(pow(diff[0], 2) + pow(diff[1], 2) + pow(diff[2], 2));
+    err_sum += norm_diff/norm_exact;
+  }
   err_sum /= N;
 
   printf("\nAverage relative error:  %8g\n", err_sum);
+
+
+  // Append results to file
+  FILE * f = fopen("results.txt", "a");
+
+  fprintf(f, "%d  %1.3f  %8g  %8g  %8g  %8g\n", N, opening_threshold, time_tree, mean_used_nodes, time_exact, err_sum);
+
+  fclose(f);
 
   exit(0);
 }
